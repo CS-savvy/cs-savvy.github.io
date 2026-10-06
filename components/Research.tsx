@@ -95,14 +95,34 @@ export default function Research() {
         </motion.div>
 
         {/* Items */}
-        <div className="grid md:grid-cols-2 gap-5">
+        <div className="grid md:grid-cols-2 gap-4">
           {items.map((item, i) => (
             <motion.div
               key={item.title}
               initial={{ opacity: 0, y: 24 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 + i * 0.08 }}
-              className="card-base card-hover p-6"
+              transition={{ duration: 0.5, delay: 0.1 + i * 0.07 }}
+              className="rounded-2xl p-6 transition-all duration-300 hover:-translate-y-0.5"
+              style={{
+                background: item.type === "paper"
+                  ? "linear-gradient(135deg, rgba(14,165,233,0.04) 0%, rgba(24,24,27,0.6) 100%)"
+                  : "linear-gradient(135deg, rgba(245,158,11,0.04) 0%, rgba(24,24,27,0.6) 100%)",
+                border: item.type === "paper"
+                  ? "1px solid rgba(14,165,233,0.12)"
+                  : "1px solid rgba(245,158,11,0.12)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 40px rgba(0,0,0,0.3)";
+                (e.currentTarget as HTMLElement).style.borderColor = item.type === "paper"
+                  ? "rgba(14,165,233,0.25)"
+                  : "rgba(245,158,11,0.25)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = "";
+                (e.currentTarget as HTMLElement).style.borderColor = item.type === "paper"
+                  ? "rgba(14,165,233,0.12)"
+                  : "rgba(245,158,11,0.12)";
+              }}
             >
               {/* Type badge */}
               <div className="flex items-center justify-between mb-4">
@@ -128,7 +148,7 @@ export default function Research() {
                 )}
               </div>
 
-              <h3 className="text-base font-semibold text-white mb-3 leading-snug">
+              <h3 className="text-sm font-semibold text-white mb-3 leading-snug">
                 {item.title}
               </h3>
               <p className="text-sm text-zinc-500 leading-relaxed mb-4">{item.description}</p>
@@ -138,7 +158,11 @@ export default function Research() {
                 {item.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs px-2.5 py-1 bg-zinc-800/60 text-zinc-400 rounded-full border border-zinc-700/40"
+                    className="text-xs px-2.5 py-1 rounded-full text-zinc-400 font-medium"
+                    style={{
+                      background: "rgba(255,255,255,0.05)",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                    }}
                   >
                     {tag}
                   </span>

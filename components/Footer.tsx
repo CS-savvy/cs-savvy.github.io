@@ -31,16 +31,30 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-zinc-800/60 bg-zinc-950">
+    <footer className="bg-zinc-950" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      {/* Gradient accent line */}
+      <div
+        className="h-[1px] w-full"
+        style={{
+          background: "linear-gradient(90deg, transparent 0%, rgba(99,102,241,0.4) 30%, rgba(139,92,246,0.3) 60%, transparent 100%)",
+        }}
+      />
+
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           {/* Brand */}
           <div className="text-center md:text-left">
-            <Link href="/" className="inline-flex items-center gap-2 mb-2">
-              <span className="w-7 h-7 rounded-lg bg-indigo-500 flex items-center justify-center text-xs font-bold text-white">
+            <Link href="/" className="inline-flex items-center gap-2.5 mb-2">
+              <span
+                className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold text-white"
+                style={{
+                  background: "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
+                  boxShadow: "0 2px 8px rgba(99,102,241,0.3)",
+                }}
+              >
                 MK
               </span>
-              <span className="font-semibold text-white">Mukul Kumar</span>
+              <span className="font-semibold text-white text-sm">Mukul Kumar</span>
             </Link>
             <p className="text-xs text-zinc-600">
               Applied AI Engineer — Computer Vision · NLP · Production ML
@@ -48,12 +62,12 @@ export default function Footer() {
           </div>
 
           {/* Nav links */}
-          <nav className="flex flex-wrap justify-center gap-5">
+          <nav className="flex flex-wrap justify-center gap-1">
             {footerLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm text-zinc-500 hover:text-white transition-colors"
+                className="text-sm text-zinc-500 hover:text-white transition-colors px-3 py-1.5 rounded-lg hover:bg-white/5"
               >
                 {link.label}
               </a>
@@ -61,7 +75,7 @@ export default function Footer() {
           </nav>
 
           {/* Social */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {socialLinks.map((link) => (
               <a
                 key={link.label}
@@ -69,7 +83,19 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={link.label}
-                className="w-9 h-9 flex items-center justify-center rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-500 hover:text-white hover:border-zinc-700 transition-all duration-200"
+                className="w-9 h-9 flex items-center justify-center rounded-lg text-zinc-500 hover:text-white transition-all duration-200"
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.12)";
+                  (e.currentTarget as HTMLElement).style.border = "1px solid rgba(99,102,241,0.25)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
+                  (e.currentTarget as HTMLElement).style.border = "1px solid rgba(255,255,255,0.08)";
+                }}
               >
                 {link.icon}
               </a>
@@ -78,7 +104,10 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-8 pt-6 border-t border-zinc-800/50 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-600">
+        <div
+          className="mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-600"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        >
           <span>© {new Date().getFullYear()} Mukul Kumar. All rights reserved.</span>
           <span>Built with Next.js · Tailwind CSS · Framer Motion</span>
         </div>
