@@ -1,12 +1,31 @@
 {
   "name": "cs-savvy-portfolio",
-  "version": "1.0.0",
-  "description": "CS Savvy Portfolio Website",
-  "main": "index.html",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Mukul — Deep Learning Engineer portfolio",
   "scripts": {
-    "build": "echo 'Build complete'",
-    "start": "echo 'Production server'"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit"
   },
-  "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "next": "^16.3.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "resend": "^6.32.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24.19.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.8",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3"
+  }
 }
