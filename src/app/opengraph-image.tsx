@@ -1,11 +1,16 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { site } from "@/content/site";
 
-export const alt = `${site.name} — ${site.role}`;
+export const alt = `${site.name} - ${site.role}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpengraphImage() {
+export default async function OpengraphImage() {
+  const favicon = await readFile(join(process.cwd(), "public/favicon.svg"));
+  const logoSrc = `data:image/svg+xml;base64,${favicon.toString("base64")}`;
+
   return new ImageResponse(
     (
       <div
@@ -20,6 +25,8 @@ export default function OpengraphImage() {
           color: "#ededf2",
         }}
       >
+        {/* eslint-disable-next-line jsx-a11y/alt-text */}
+        <img src={logoSrc} width={96} height={96} style={{ marginBottom: 40 }} />
         <div style={{ fontSize: 80, fontWeight: 700, letterSpacing: -2 }}>{site.name}</div>
         <div
           style={{

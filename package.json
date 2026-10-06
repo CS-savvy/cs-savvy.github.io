@@ -2,13 +2,14 @@
   "name": "cs-savvy-portfolio",
   "version": "2.0.0",
   "private": true,
-  "description": "Mukul — Deep Learning Engineer portfolio",
+  "description": "Mukul - Deep Learning Engineer portfolio",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "license": "MIT",
   "dependencies": {

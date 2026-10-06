@@ -10,10 +10,19 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: `${site.name} — ${site.role}`, template: `%s · ${site.name}` },
+  title: { default: `${site.name} - ${site.role}`, template: `%s · ${site.name}` },
   description: site.intro,
   openGraph: { type: "website", siteName: site.name, url: "/" },
   twitter: { card: "summary_large_image" },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
+  },
+  manifest: "/site.webmanifest",
 };
 
 export const viewport: Viewport = {

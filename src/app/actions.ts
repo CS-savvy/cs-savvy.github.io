@@ -51,5 +51,5 @@ export async function sendContact(_prev: ContactState, formData: FormData): Prom
     console.error("Resend error:", error);
     return { status: "error", message: "Something went wrong sending your message. Please try again.", fields: raw };
   }
-  return { status: "success", message: "Thanks! Your message has been sent — I'll get back to you soon." };
+  return { status: "success", message: "Thanks! Your message has been sent - I'll get back to you soon." };
 }

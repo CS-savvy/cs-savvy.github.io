@@ -24,11 +24,11 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="group flex items-center gap-2 font-semibold tracking-tight" onClick={() => setOpen(false)}>
-          <span className="grid size-8 place-items-center rounded-lg bg-gradient-to-br from-accent to-accent-2 font-mono text-sm text-white">
-            {site.name.charAt(0)}
-          </span>
-          <span>{site.name}</span>
+        <Link href="/" aria-label={`${site.name} - home`} className="flex items-center" onClick={() => setOpen(false)}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-light.svg" alt="" width={158} height={32} className="h-8 w-auto dark:hidden" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-dark.svg" alt="" width={158} height={32} className="hidden h-8 w-auto dark:block" />
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-1 md:flex">

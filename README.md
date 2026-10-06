@@ -1,4 +1,4 @@
-# Mukul — Deep Learning Engineer portfolio
+# Mukul - Deep Learning Engineer portfolio
 
 Built with **Next.js 16** (App Router, Turbopack), **React 19**, **TypeScript** and **Tailwind CSS v4**.
 
@@ -23,4 +23,4 @@ Copy `.env.example` to `.env.local` and set `RESEND_API_KEY` and `CONTACT_TO_EMA
 
 ## Deploy
 
-Push to the connected Vercel project — `vercel.json` sets the framework to Next.js.
+Push to the connected Vercel project - `vercel.json` sets the framework to Next.js.
