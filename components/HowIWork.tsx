@@ -77,7 +77,7 @@ export default function HowIWork() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="process" className="py-32 px-6 bg-zinc-900/20">
+    <section id="process" className="py-32 px-6" style={{ background: "rgba(24,24,27,0.3)" }}>
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
@@ -96,24 +96,47 @@ export default function HowIWork() {
         </motion.div>
 
         {/* Steps */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {steps.map((step, i) => (
             <motion.div
               key={step.number}
               initial={{ opacity: 0, y: 24 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.1 + i * 0.08 }}
-              className="card-base p-6 group hover:border-zinc-700/60 transition-all duration-300"
+              className="group relative rounded-2xl p-6 transition-all duration-300 hover:-translate-y-0.5"
+              style={{
+                background: "rgba(24,24,27,0.6)",
+                border: "1px solid rgba(255,255,255,0.07)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.border = "1px solid rgba(99,102,241,0.2)";
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 40px rgba(0,0,0,0.3), 0 0 0 0 rgba(99,102,241,0.1)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.border = "1px solid rgba(255,255,255,0.07)";
+                (e.currentTarget as HTMLElement).style.boxShadow = "";
+              }}
             >
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 flex-shrink-0 group-hover:bg-indigo-500/20 transition-colors">
+              <div className="flex items-start justify-between mb-4">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-indigo-400 flex-shrink-0 transition-all duration-300 group-hover:scale-105"
+                  style={{
+                    background: "rgba(99,102,241,0.1)",
+                    border: "1px solid rgba(99,102,241,0.2)",
+                  }}
+                >
                   {step.icon}
                 </div>
-                <span className="text-4xl font-bold text-zinc-800 leading-none select-none">
+                <span
+                  className="text-3xl font-bold leading-none select-none tabular-nums"
+                  style={{ color: "rgba(99,102,241,0.15)" }}
+                >
                   {step.number}
                 </span>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">{step.title}</h3>
+              <h3 className="text-base font-semibold text-white mb-2 group-hover:text-indigo-100 transition-colors">
+                {step.title}
+              </h3>
               <p className="text-sm text-zinc-500 leading-relaxed">{step.description}</p>
             </motion.div>
           ))}

@@ -14,9 +14,11 @@ type Project = {
   stack: string[];
   metrics: { value: string; label: string }[];
   highlights: string[];
-  dotColor: string;
+  accentColor: string;
   metricColor: string;
   badgeClass: string;
+  dotColor: string;
+  glowColor: string;
 };
 
 const projects: Project[] = [
@@ -44,9 +46,11 @@ const projects: Project[] = [
       "TensorRT optimization for production inference",
       "Deployed and serving across 10+ countries",
     ],
-    dotColor: "bg-indigo-400",
+    accentColor: "#6366f1",
     metricColor: "text-indigo-400",
     badgeClass: "text-indigo-300 bg-indigo-500/10 border-indigo-500/30",
+    dotColor: "bg-indigo-400",
+    glowColor: "rgba(99,102,241,0.06)",
   },
   {
     number: "02",
@@ -72,9 +76,11 @@ const projects: Project[] = [
       "Custom homography-based distance estimation",
       "Distributed alert and spatial zone management",
     ],
-    dotColor: "bg-emerald-400",
+    accentColor: "#10b981",
     metricColor: "text-emerald-400",
     badgeClass: "text-emerald-300 bg-emerald-500/10 border-emerald-500/30",
+    dotColor: "bg-emerald-400",
+    glowColor: "rgba(16,185,129,0.05)",
   },
   {
     number: "03",
@@ -100,9 +106,11 @@ const projects: Project[] = [
       "Published in MDPI Biomimetics, July 2023",
       "Evaluated on open, public benchmark datasets",
     ],
-    dotColor: "bg-violet-400",
+    accentColor: "#8b5cf6",
     metricColor: "text-violet-400",
     badgeClass: "text-violet-300 bg-violet-500/10 border-violet-500/30",
+    dotColor: "bg-violet-400",
+    glowColor: "rgba(139,92,246,0.06)",
   },
 ];
 
@@ -130,92 +138,141 @@ export default function Projects() {
         </motion.div>
 
         {/* Project cards */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-5">
           {projects.map((project, i) => (
             <motion.article
               key={project.number}
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.1 + i * 0.12 }}
-              className="card-base card-hover p-8 lg:p-10"
+              className="relative rounded-2xl border border-zinc-800/60 overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl"
+              style={{
+                background: "rgba(24,24,27,0.5)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = `0 24px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06)`;
+                (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = "";
+                (e.currentTarget as HTMLElement).style.borderColor = "";
+              }}
             >
-              <div className="flex flex-col xl:flex-row gap-8">
-                {/* Main content */}
-                <div className="flex-1 min-w-0">
-                  {/* Header row */}
-                  <div className="flex flex-col sm:flex-row sm:items-start gap-4 mb-5">
-                    <span className="text-6xl font-bold text-zinc-800 leading-none select-none flex-shrink-0">
-                      {project.number}
-                    </span>
-                    <div className="min-w-0">
-                      <span
-                        className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold border mb-2 ${project.badgeClass}`}
-                      >
-                        {project.badge}
+              {/* Accent top border */}
+              <div
+                className="absolute top-0 inset-x-0 h-[2px]"
+                style={{
+                  background: `linear-gradient(90deg, ${project.accentColor}00 0%, ${project.accentColor}cc 40%, ${project.accentColor}80 70%, ${project.accentColor}00 100%)`,
+                }}
+              />
+
+              {/* Subtle glow */}
+              <div
+                className="absolute top-0 inset-x-0 h-32 pointer-events-none"
+                style={{
+                  background: `radial-gradient(ellipse 60% 100% at 50% 0%, ${project.glowColor} 0%, transparent 100%)`,
+                }}
+              />
+
+              <div className="relative p-8 lg:p-10">
+                <div className="flex flex-col xl:flex-row gap-8">
+                  {/* Main content */}
+                  <div className="flex-1 min-w-0">
+                    {/* Header row */}
+                    <div className="flex flex-col sm:flex-row sm:items-start gap-4 mb-5">
+                      <span className="text-6xl font-bold leading-none select-none flex-shrink-0" style={{ color: `${project.accentColor}20` }}>
+                        {project.number}
                       </span>
-                      <h3 className="text-2xl font-bold text-white leading-tight">
-                        {project.title}
-                      </h3>
-                      <p className="text-sm text-zinc-500 mt-1 font-medium">{project.category}</p>
-                    </div>
-                  </div>
-
-                  <p className="text-zinc-400 mb-6 leading-relaxed">{project.description}</p>
-
-                  {/* Problem / Approach */}
-                  <div className="grid sm:grid-cols-2 gap-4 mb-6">
-                    <div className="bg-zinc-950/60 rounded-xl p-4 border border-zinc-800/40">
-                      <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-2">
-                        Problem
-                      </p>
-                      <p className="text-sm text-zinc-400 leading-relaxed">{project.problem}</p>
-                    </div>
-                    <div className="bg-zinc-950/60 rounded-xl p-4 border border-zinc-800/40">
-                      <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-2">
-                        Approach
-                      </p>
-                      <p className="text-sm text-zinc-400 leading-relaxed">{project.approach}</p>
-                    </div>
-                  </div>
-
-                  {/* Stack */}
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.stack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="text-xs px-3 py-1.5 bg-zinc-800/70 text-zinc-400 rounded-full border border-zinc-700/40 font-medium"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Highlights */}
-                  <ul className="space-y-2">
-                    {project.highlights.map((item) => (
-                      <li key={item} className="flex items-start gap-2.5 text-sm text-zinc-500">
+                      <div className="min-w-0">
                         <span
-                          className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${project.dotColor}`}
-                        />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Metrics column */}
-                <div className="xl:w-44 flex xl:flex-col gap-3 flex-wrap">
-                  {project.metrics.map((metric) => (
-                    <div
-                      key={metric.label}
-                      className="flex-1 xl:flex-none bg-zinc-950/80 rounded-xl p-4 border border-zinc-800/50 text-center min-w-[100px]"
-                    >
-                      <div className={`text-2xl font-bold mb-1 tabular-nums ${project.metricColor}`}>
-                        {metric.value}
+                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold border mb-2.5 ${project.badgeClass}`}
+                        >
+                          {project.badge}
+                        </span>
+                        <h3 className="text-2xl font-bold text-white leading-tight">
+                          {project.title}
+                        </h3>
+                        <p className="text-sm text-zinc-500 mt-1 font-medium">{project.category}</p>
                       </div>
-                      <div className="text-xs text-zinc-500 leading-snug">{metric.label}</div>
                     </div>
-                  ))}
+
+                    <p className="text-zinc-400 mb-6 leading-relaxed">{project.description}</p>
+
+                    {/* Problem / Approach */}
+                    <div className="grid sm:grid-cols-2 gap-3 mb-6">
+                      <div
+                        className="rounded-xl p-4"
+                        style={{
+                          background: "rgba(9,9,11,0.5)",
+                          border: "1px solid rgba(255,255,255,0.06)",
+                        }}
+                      >
+                        <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-2">
+                          Problem
+                        </p>
+                        <p className="text-sm text-zinc-400 leading-relaxed">{project.problem}</p>
+                      </div>
+                      <div
+                        className="rounded-xl p-4"
+                        style={{
+                          background: "rgba(9,9,11,0.5)",
+                          border: "1px solid rgba(255,255,255,0.06)",
+                        }}
+                      >
+                        <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-2">
+                          Approach
+                        </p>
+                        <p className="text-sm text-zinc-400 leading-relaxed">{project.approach}</p>
+                      </div>
+                    </div>
+
+                    {/* Stack */}
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {project.stack.map((tech) => (
+                        <span
+                          key={tech}
+                          className="text-xs px-3 py-1.5 rounded-full font-medium text-zinc-400"
+                          style={{
+                            background: "rgba(255,255,255,0.05)",
+                            border: "1px solid rgba(255,255,255,0.08)",
+                          }}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Highlights */}
+                    <ul className="space-y-2">
+                      {project.highlights.map((item) => (
+                        <li key={item} className="flex items-start gap-2.5 text-sm text-zinc-500">
+                          <span
+                            className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 ${project.dotColor}`}
+                          />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Metrics column */}
+                  <div className="xl:w-44 flex xl:flex-col gap-3 flex-wrap">
+                    {project.metrics.map((metric) => (
+                      <div
+                        key={metric.label}
+                        className="flex-1 xl:flex-none rounded-xl p-4 text-center min-w-[100px] transition-all duration-200"
+                        style={{
+                          background: `linear-gradient(135deg, ${project.accentColor}08 0%, rgba(9,9,11,0.6) 100%)`,
+                          border: `1px solid ${project.accentColor}20`,
+                        }}
+                      >
+                        <div className={`text-2xl font-bold mb-1.5 tabular-nums ${project.metricColor}`}>
+                          {metric.value}
+                        </div>
+                        <div className="text-xs text-zinc-500 leading-snug">{metric.label}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </motion.article>

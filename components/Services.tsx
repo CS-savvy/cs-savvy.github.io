@@ -118,12 +118,32 @@ export default function Services() {
               initial={{ opacity: 0, y: 24 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: 0.05 + i * 0.06 }}
-              className="card-base p-6 group hover:border-zinc-700/60 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/30 transition-all duration-300"
+              className="group rounded-2xl p-6 transition-all duration-300 hover:-translate-y-0.5"
+              style={{
+                background: "rgba(24,24,27,0.5)",
+                border: "1px solid rgba(255,255,255,0.07)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.border = "1px solid rgba(99,102,241,0.2)";
+                (e.currentTarget as HTMLElement).style.background = "rgba(24,24,27,0.8)";
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 40px rgba(0,0,0,0.35), 0 0 20px rgba(99,102,241,0.05)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.border = "1px solid rgba(255,255,255,0.07)";
+                (e.currentTarget as HTMLElement).style.background = "rgba(24,24,27,0.5)";
+                (e.currentTarget as HTMLElement).style.boxShadow = "";
+              }}
             >
-              <div className="w-11 h-11 rounded-xl bg-zinc-800 flex items-center justify-center text-zinc-400 mb-4 group-hover:bg-indigo-500/15 group-hover:text-indigo-400 transition-all duration-300">
+              <div
+                className="w-11 h-11 rounded-xl flex items-center justify-center text-zinc-500 mb-4 group-hover:text-indigo-400 transition-all duration-300"
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
+              >
                 {service.icon}
               </div>
-              <h3 className="text-base font-semibold text-white mb-2 leading-snug">
+              <h3 className="text-base font-semibold text-white mb-2 leading-snug group-hover:text-indigo-100 transition-colors">
                 {service.title}
               </h3>
               <p className="text-sm text-zinc-500 leading-relaxed">{service.description}</p>
@@ -143,7 +163,19 @@ export default function Services() {
           </p>
           <a
             href="#contact"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl border border-zinc-800 hover:border-zinc-700 transition-all duration-200 font-medium text-sm"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm text-zinc-300 hover:text-white transition-all duration-200"
+            style={{
+              background: "rgba(24,24,27,0.6)",
+              border: "1px solid rgba(255,255,255,0.1)",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.background = "rgba(99,102,241,0.1)";
+              (e.currentTarget as HTMLElement).style.border = "1px solid rgba(99,102,241,0.3)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.background = "rgba(24,24,27,0.6)";
+              (e.currentTarget as HTMLElement).style.border = "1px solid rgba(255,255,255,0.1)";
+            }}
           >
             Get in touch
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
