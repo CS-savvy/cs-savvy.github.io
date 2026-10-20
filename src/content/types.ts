@@ -17,6 +17,7 @@ export type SectionKey =
   | "research"
   | "skills"
   | "education"
+  | "sideProjects"
   | "blog"
   | "contact";
 
@@ -36,7 +37,14 @@ export type SiteSettings = {
   email?: string;
   contactBlurb?: string;
   socials: Social[];
+  sideProjects: SideProject[];
   headings: Partial<Record<SectionKey, { eyebrow?: string; title?: string }>>;
+};
+
+export type SideProject = {
+  title: string;
+  href: string;
+  description?: string;
 };
 
 export type Project = {

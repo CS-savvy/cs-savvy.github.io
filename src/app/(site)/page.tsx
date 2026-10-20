@@ -5,6 +5,7 @@ import { ProjectCard } from "@/components/project-card";
 import { Section } from "@/components/section";
 import { PostCard } from "@/components/post-card";
 import { RichText } from "@/components/rich-text";
+import { SideProjectCard } from "@/components/side-project-card";
 import { SocialLinks } from "@/components/social-links";
 import { LINKEDIN_RECOMMENDATIONS_URL, TestimonialCard } from "@/components/testimonial";
 import { getPosts, getProjects, getResume, getSettings, getTestimonials, heading, type SiteSettings } from "@/content";
@@ -213,6 +214,16 @@ export default async function Home() {
                 ))}
               </ul>
             )}
+          </div>
+        </Section>
+      )}
+
+      {site.sideProjects.length > 0 && (
+        <Section id="side-projects" {...heading(site, "sideProjects")}>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {site.sideProjects.map((p) => (
+              <SideProjectCard key={p.href} project={p} />
+            ))}
           </div>
         </Section>
       )}

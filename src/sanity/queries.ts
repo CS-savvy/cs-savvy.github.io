@@ -8,6 +8,7 @@ export const SETTINGS_QUERY = defineQuery(`*[_id == "siteSettings"][0]{
   "stats": coalesce(stats, []),
   email, contactBlurb,
   "socials": coalesce(socials, []),
+  "sideProjects": coalesce(sideProjects, []),
   "headings": {
     "experience": experienceHeading,
     "projects": projectsHeading,
@@ -15,6 +16,7 @@ export const SETTINGS_QUERY = defineQuery(`*[_id == "siteSettings"][0]{
     "research": researchHeading,
     "skills": skillsHeading,
     "education": educationHeading,
+    "sideProjects": sideProjectsHeading,
     "blog": blogHeading,
     "contact": contactHeading
   }

@@ -49,6 +49,18 @@ export const fallbackSettings: SiteSettings = {
     { label: "LinkedIn", href: "https://www.linkedin.com/in/mukulkr", icon: "linkedin" },
     { label: "Email", href: "mailto:mukul.kr99@gmail.com", icon: "mail" },
   ],
+  sideProjects: [
+    {
+      title: "LEHO",
+      href: "https://leho.in",
+      description: "Website for the Ladakh Environment and Health Organization, a Leh-based NGO working on community development and climate adaptation.",
+    },
+    {
+      title: "Voyager Ladakh",
+      href: "https://voyagerladakh.com",
+      description: "Website for a Leh-based travel company running treks, expeditions and motorbike tours across Ladakh.",
+    },
+  ],
   headings: {},
 };
 
