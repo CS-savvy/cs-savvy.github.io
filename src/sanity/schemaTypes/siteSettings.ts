@@ -9,6 +9,7 @@ export const siteSettings = defineType({
     { name: "hero", title: "Hero" },
     { name: "about", title: "About" },
     { name: "contact", title: "Contact & socials" },
+    { name: "sideProjects", title: "Side projects" },
     { name: "sections", title: "Section headings" },
   ],
   fields: [
@@ -93,6 +94,30 @@ export const siteSettings = defineType({
       ],
     }),
 
+    defineField({
+      name: "sideProjects",
+      title: "Side projects",
+      type: "array",
+      group: "sideProjects",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "sideProject",
+          fields: [
+            defineField({ name: "title", type: "string", validation: (r) => r.required() }),
+            defineField({
+              name: "href",
+              title: "URL",
+              type: "url",
+              validation: (r) => r.required().uri({ scheme: ["http", "https"] }),
+            }),
+            defineField({ name: "description", type: "text", rows: 2, description: "One line about what it is" }),
+          ],
+          preview: { select: { title: "title", subtitle: "href" } },
+        }),
+      ],
+    }),
+
     ...(
       [
         ["experienceHeading", "Experience"],
@@ -101,6 +126,7 @@ export const siteSettings = defineType({
         ["researchHeading", "Research"],
         ["skillsHeading", "Skills"],
         ["educationHeading", "Education"],
+        ["sideProjectsHeading", "Side projects"],
         ["blogHeading", "Blog"],
         ["contactHeading", "Contact"],
       ] as const

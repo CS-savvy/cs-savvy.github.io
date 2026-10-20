@@ -70,6 +70,7 @@ const defaultHeadings: Record<SectionKey, { eyebrow: string; title: string }> = 
   research: { eyebrow: "Research", title: "Publications & patents" },
   skills: { eyebrow: "Toolkit", title: "What I work with" },
   education: { eyebrow: "Background", title: "Education & certifications" },
+  sideProjects: { eyebrow: "Side projects", title: "Built on the side" },
   blog: { eyebrow: "Journal", title: "Life beyond the code" },
   contact: { eyebrow: "Contact", title: "Let's build something together" },
 };
