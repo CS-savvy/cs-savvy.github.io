@@ -2,23 +2,23 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeftIcon, ExternalIcon } from "@/components/icons";
-import { projects } from "@/content/site";
+import { RichText } from "@/components/rich-text";
+import { CompactTestimonial } from "@/components/testimonial";
+import { getProject, getProjectTestimonial, getProjects } from "@/content";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return projects.map(({ slug }) => ({ slug }));
+export async function generateStaticParams() {
+  return (await getProjects()).map(({ slug }) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/projects/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+  const project = await getProject(slug);
   return project ? { title: project.title, description: project.summary } : {};
 }
 
 export default async function ProjectPage({ params }: PageProps<"/projects/[slug]">) {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+  const [project, testimonial] = await Promise.all([getProject(slug), getProjectTestimonial(slug)]);
   if (!project) notFound();
 
   return (
@@ -27,8 +27,12 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
         <ArrowLeftIcon width={16} height={16} /> All projects
       </Link>
 
-      <p className="mt-10 font-mono text-xs text-muted">{project.year}</p>
-      <h1 className="mt-2 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">{project.title}</h1>
+      {project.year && <p className="mt-10 font-mono text-xs text-muted">{project.year}</p>}
+      <h1
+        className={`${project.year ? "mt-2" : "mt-10"} text-4xl font-semibold tracking-tight text-balance sm:text-5xl`}
+      >
+        {project.title}
+      </h1>
       <p className="mt-4 text-lg text-muted">{project.summary}</p>
 
       <ul className="mt-6 flex flex-wrap gap-1.5">
@@ -39,11 +43,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
         ))}
       </ul>
 
-      <div className="mt-12 space-y-5 text-lg leading-relaxed">
-        {project.description.map((p) => (
-          <p key={p}>{p}</p>
-        ))}
-      </div>
+      <RichText value={project.description} className="mt-12 space-y-5 text-lg leading-relaxed" />
 
       {project.highlights?.length ? (
         <section className="mt-12 rounded-2xl border border-border bg-card p-6">
@@ -74,6 +74,8 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
           ))}
         </div>
       ) : null}
+
+      <CompactTestimonial testimonial={testimonial} />
     </article>
   );
 }

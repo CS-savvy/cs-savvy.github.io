@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Project } from "@/content/site";
+import type { Project } from "@/content/types";
 import { ArrowRightIcon } from "./icons";
 
 export function ProjectCard({ project }: { project: Project }) {

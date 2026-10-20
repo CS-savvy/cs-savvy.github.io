@@ -1,58 +1,23 @@
 /**
- * All site content lives here. Edit this file to update the portfolio -
- * no component changes required.
+ * Fallback content, used until the Sanity dataset has a "Site settings" document.
+ * It is also the seed data for `npm run seed` (scripts/seed-sanity.ts).
+ * Once the CMS is seeded, edit content in the Studio at /studio instead.
  */
 
-export type Social = {
-  label: string;
-  href: string;
-  icon: "github" | "linkedin" | "x" | "scholar" | "mail";
-};
+import type { Project, Resume, RichText, SiteSettings, Testimonial } from "./types";
 
-export type Project = {
-  slug: string;
-  title: string;
-  summary: string;
-  description: string[];
-  tags: string[];
-  year: string;
-  highlights?: string[];
-  links?: { label: string; href: string }[];
-  featured?: boolean;
-};
+/** Turns plain paragraphs into Portable Text blocks. */
+export function paragraphs(texts: string[]): RichText {
+  return texts.map((text, i) => ({
+    _type: "block",
+    _key: `p${i}`,
+    style: "normal",
+    markDefs: [],
+    children: [{ _type: "span", _key: `p${i}s`, text, marks: [] }],
+  }));
+}
 
-export type Experience = {
-  role: string;
-  company: string;
-  period: string;
-  location?: string;
-  points: string[];
-  stack?: string[];
-};
-
-export type Publication = {
-  title: string;
-  venue: string;
-  date: string;
-  authors?: string;
-  summary?: string;
-  href?: string;
-};
-
-export type Patent = {
-  title: string;
-  filed: string;
-  id?: string;
-};
-
-export type Education = {
-  degree: string;
-  school: string;
-  period: string;
-  location?: string;
-};
-
-export const site = {
+export const fallbackSettings: SiteSettings = {
   name: "Mukul Kumar",
   role: "Senior Data Scientist",
   url: "https://mukulkumar.dev",
@@ -60,11 +25,12 @@ export const site = {
     "I build and ship deep learning systems for computer vision and NLP - from research prototype to production.",
   intro:
     "Machine Learning and AI Engineer with 8 years of experience deploying deep learning solutions, 5 filed patents and 2 peer-reviewed publications. Research interests: Graph Neural Networks and attention methods.",
-  about: [
+  aboutTitle: "Hi, I'm Mukul.",
+  about: paragraphs([
     "I'm a Machine Learning and AI Engineer with 8 years of experience taking deep learning systems from research to production - most recently automating vehicle damage assessment for insurance claims, and before that, extracting structured data from millions of scanned receipts deployed across multiple countries.",
     "My research interests are Graph Neural Networks and attention methods. That work has produced 5 filed patents and 2 peer-reviewed papers, including a lightweight GAT-based text line detector presented at the KDD Document Intelligence Workshop.",
     "I care about the unglamorous parts that make models useful: clean data pipelines, honest evaluation, retraining when data drifts, and inference that fits the latency and cost budget (TensorRT, Triton, DeepStream). I'm always happy to collaborate with researchers on NLP or computer vision projects.",
-  ],
+  ]),
   stats: [
     { value: "8", label: "Years in applied ML" },
     { value: "5", label: "Patents filed" },
@@ -74,22 +40,35 @@ export const site = {
   resumeUrl: "/resume/mukul-resume.pdf",
   location: "Bengaluru, India",
   email: "mukul.kr99@gmail.com",
+  focus: "Computer Vision, NLP, GNNs",
+  contactBlurb:
+    "Have a role, a research collaboration or an interesting CV/NLP problem in mind? Send me a message and I'll reply as soon as I can.",
   availability: "Open to new opportunities",
   socials: [
     { label: "GitHub", href: "https://github.com/CS-savvy", icon: "github" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/mukulkr", icon: "linkedin" },
     { label: "Email", href: "mailto:mukul.kr99@gmail.com", icon: "mail" },
-  ] as Social[],
+  ],
+  headings: {},
 };
 
-export const skills: { group: string; items: string[] }[] = [
+const skills: Resume["skills"] = [
   {
     group: "Models & Methods",
     items: ["Transformers & GPT", "Diffusion & GANs", "CNNs & GNNs", "LSTMs", "Self- & weakly-supervised learning"],
   },
   {
     group: "Frameworks",
-    items: ["PyTorch", "TensorFlow / Keras", "Hugging Face", "Deep Graph Library", "OpenCV", "ONNX", "scikit-learn", "spaCy"],
+    items: [
+      "PyTorch",
+      "TensorFlow / Keras",
+      "Hugging Face",
+      "Deep Graph Library",
+      "OpenCV",
+      "ONNX",
+      "scikit-learn",
+      "spaCy",
+    ],
   },
   {
     group: "Deployment & MLOps",
@@ -101,17 +80,17 @@ export const skills: { group: string; items: string[] }[] = [
   },
 ];
 
-export const projects: Project[] = [
+export const fallbackProjects: Project[] = [
   {
     slug: "vehicle-damage-assessment",
     title: "Automated Vehicle Damage Assessment",
     summary:
       "Ensemble computer-vision system that detects vehicle damage and missing parts for insurance claims - 90% damage-detection accuracy.",
-    description: [
+    description: paragraphs([
       "At XA Group I led full-stack development of the deep learning systems behind automated motor-insurance claims: given photos of a vehicle, the system detects and localises damage and identifies missing parts so claims can be assessed without a manual inspection.",
       "The solution is an ensemble of computer-vision models. To keep labelling affordable I built self-supervised learning pipelines that pre-train on unlabelled claim images, so far fewer annotated examples are needed for each new damage type.",
       "After deployment I owned the models in production - monitoring for data drift and retraining when the incoming data distribution shifted. Models were optimised with TensorRT for inference.",
-    ],
+    ]),
     tags: ["Computer Vision", "Self-Supervised", "PyTorch", "TensorRT", "AzureML"],
     year: "2023 – 2026",
     highlights: [
@@ -127,11 +106,11 @@ export const projects: Project[] = [
     title: "Information Extraction from Receipts",
     summary:
       "CV + NLP pipeline that extracts and decodes purchased items from scanned receipts. Deployed in multiple countries; 4 patents and a KDD workshop paper.",
-    description: [
+    description: paragraphs([
       "At Blackstraw I worked with the client's team on extracting every item - description, quantity and price - from photos and scans of printed receipts, despite heavy perspective distortion, creases and varied layouts.",
       "The pipeline chains several computer-vision models (text detection, OCR, line detection) with NLP models that structure the result: text classification, named-entity recognition, coreference resolution, dependency parsing and knowledge-graph embeddings for product matching.",
       "A key component is a lightweight Graph Attention Network that groups OCR detections into text lines, which became a published paper. Models were served with TF Serving and TensorRT, with custom CUDA kernels via PyCUDA.",
-    ],
+    ]),
     tags: ["Document AI", "GNN", "NLP", "OCR", "DGL", "TensorRT"],
     year: "2019 – 2023",
     highlights: [
@@ -152,11 +131,11 @@ export const projects: Project[] = [
     title: "GAT for Text Line Detection",
     summary:
       "4M-parameter Graph Attention + GRU model for line detection on receipts - state-of-the-art 97.23% F1 on CORD with 100–200× fewer parameters.",
-    description: [
+    description: paragraphs([
       "Matching key–value pairs on receipts depends on knowing which OCR detections sit on the same line, and existing line-detection models were built for structured documents and generalised poorly to receipts.",
       "We modelled OCR detections as a graph and combined Graph Attention layers with Gated Recurrent Units to predict line membership. An ablation study validated each architectural choice.",
       "The paper was presented at the Document Intelligence Workshop at KDD 2022 in Washington DC.",
-    ],
+    ]),
     tags: ["Research", "Graph Attention Networks", "Document AI"],
     year: "2022",
     highlights: [
@@ -176,10 +155,10 @@ export const projects: Project[] = [
     slug: "social-distancing-monitoring",
     title: "Social Distancing Monitoring System",
     summary: "Real-time, multi-camera system that flags social-distancing violations from existing CCTV feeds.",
-    description: [
+    description: paragraphs([
       "An end-to-end system that uses the CCTV cameras already installed on a property to detect people, estimate the real-world distance between them and flag violations of social-distancing rules in real time.",
       "Built on NVIDIA DeepStream with TensorRT-optimised detectors and GStreamer/FFmpeg video pipelines, packaged with Docker for deployment on site.",
-    ],
+    ]),
     tags: ["Computer Vision", "DeepStream", "TensorRT", "Video Analytics"],
     year: "2020",
     highlights: ["Deployed at a facility with 40+ CCTV cameras", "Patent filed in India (202021034381)"],
@@ -189,10 +168,10 @@ export const projects: Project[] = [
     title: "Parkinson's Detection from Voice",
     summary:
       "Vocal Tab Transformer that classifies Parkinson's disease from dysphonia features, beating gradient-boosted trees by 1%+ AUC.",
-    description: [
+    description: paragraphs([
       "Parkinson's disease often shows up early in a person's voice. We extracted dysphonia measures from voice recordings and treated them as a large, complex tabular feature set.",
       "We proposed the Vocal Tab Transformer, a transformer for tabular vocal features, which outperformed the previous state of the art - Gradient-Boosted Decision Trees - by at least 1% AUC with better precision and recall.",
-    ],
+    ]),
     tags: ["Research", "Transformers", "Healthcare", "Tabular"],
     year: "2023",
     highlights: ["Published in MDPI Biomimetics (2023)", "Outperforms GBDT by ≥1% AUC"],
@@ -202,16 +181,16 @@ export const projects: Project[] = [
     slug: "fashion-catalog-models",
     title: "AI Catalogue Models for dataX.ai",
     summary: "Deep learning models powering dataX.ai, a web platform that auto-generates fashion product catalogues.",
-    description: [
+    description: paragraphs([
       "As a Data Science intern at CrowdANALYTIX I helped design and ship several deep learning models for dataX.ai, an AI-based platform for building fashion product catalogues.",
       "The work covered the full loop: preparing datasets, training on Linux GPU servers, converting models to serving format and deploying them on TensorFlow Serving.",
-    ],
+    ]),
     tags: ["Computer Vision", "TensorFlow", "TF Serving"],
     year: "2018 – 2019",
   },
 ];
 
-export const experience: Experience[] = [
+const experience: Resume["experience"] = [
   {
     role: "Senior Data Scientist",
     company: "XA Group (Xpress Automation)",
@@ -268,13 +247,11 @@ export const experience: Experience[] = [
     company: "Oil and Natural Gas Corporation (ONGC)",
     period: "Jun 2017 - Jul 2017",
     location: "Dehradun, India",
-    points: [
-      "Built an Android employee-directory app with direct calling, bookmarks and Google sign-in.",
-    ],
+    points: ["Built an Android employee-directory app with direct calling, bookmarks and Google sign-in."],
   },
 ];
 
-export const publications: Publication[] = [
+const publications: Resume["publications"] = [
   {
     title: "Graph Attention Networks for Efficient Text Line Detection on Receipt-Layout Documents",
     venue: "Document Intelligence Workshop @ KDD 2022, Washington DC",
@@ -294,15 +271,22 @@ export const publications: Publication[] = [
   },
 ];
 
-export const patents: Patent[] = [
-  { title: "Methods, Systems, Apparatus and Articles of Manufacture to Detect Lines on Documents", filed: "Jun 2022", id: "US81259087" },
+const patents: Resume["patents"] = [
+  {
+    title: "Methods, Systems, Apparatus and Articles of Manufacture to Detect Lines on Documents",
+    filed: "Jun 2022",
+    id: "US81259087",
+  },
   { title: "Automatic Document Content Extraction and Decoding", filed: "Jun 2021", id: "US81254014" },
-  { title: "Automated Extraction of Purchased Items in Images of Receipts Using Computer Vision and Deep Learning", filed: "Jun 2021" },
+  {
+    title: "Automated Extraction of Purchased Items in Images of Receipts Using Computer Vision and Deep Learning",
+    filed: "Jun 2021",
+  },
   { title: "Automated Receipt Decoding: Product Matching and Dictionaries", filed: "Jun 2021" },
   { title: "Method and System to Detect Distance Between Entities", filed: "Aug 2020", id: "IN 202021034381" },
 ];
 
-export const education: Education[] = [
+const education: Resume["education"] = [
   {
     degree: "M.Tech, Artificial Intelligence & Machine Learning",
     school: "Birla Institute of Technology and Science (BITS), Pilani - WILP",
@@ -316,7 +300,7 @@ export const education: Education[] = [
   },
 ];
 
-export const certifications: string[] = [
+const certifications: string[] = [
   "Qualified GATE CSE 2018 (score 346)",
   "DeepLearning.AI TensorFlow Developer (2020)",
   "Google Cloud Platform Fundamentals: Core Infrastructure",
@@ -324,11 +308,48 @@ export const certifications: string[] = [
   "Data Science: Deep Learning in Python",
 ];
 
-export const nav = [
-  { label: "About", href: "/#about" },
-  ...(experience.length ? [{ label: "Experience", href: "/#experience" }] : []),
-  { label: "Projects", href: "/#projects" },
-  { label: "Research", href: "/#research" },
-  { label: "Skills", href: "/#skills" },
-  { label: "Contact", href: "/#contact" },
+export const fallbackResume: Resume = { experience, publications, patents, skills, education, certifications };
+
+/**
+ * ⚠️ PLACEHOLDERS - replace with real recommendations (in the Studio once seeded).
+ * `projectSlug` links a testimonial to a case study; the seed turns it into a project reference.
+ */
+export const fallbackTestimonials: Testimonial[] = [
+  {
+    id: "placeholder-manager",
+    quote:
+      "PLACEHOLDER: Mukul took our damage-assessment model from a research notebook to a production service that adjusters rely on every day. He combines strong deep learning fundamentals with the discipline to measure, monitor and retrain - the rare engineer who owns the whole lifecycle.",
+    shortQuote: "PLACEHOLDER: Mukul took our model from a research notebook to a production service adjusters rely on daily.",
+    name: "Jane Doe",
+    title: "Head of AI",
+    company: "Example Corp",
+    relationship: "Managed Mukul at Example Corp",
+    linkedinUrl: "https://www.linkedin.com/in/placeholder-jane-doe",
+    projectSlug: "vehicle-damage-assessment",
+    featured: true,
+  },
+  {
+    id: "placeholder-peer",
+    quote:
+      "PLACEHOLDER: Working alongside Mukul on receipt extraction was a masterclass in pragmatic ML. He kept us honest about evaluation, simplified the pipeline wherever he could, and was always generous with his time when teammates got stuck.",
+    shortQuote: "PLACEHOLDER: A masterclass in pragmatic ML - honest evaluation, simple pipelines, generous with his time.",
+    name: "John Smith",
+    title: "Senior ML Engineer",
+    company: "Example Labs",
+    relationship: "Worked with Mukul on the same team",
+    linkedinUrl: "https://www.linkedin.com/in/placeholder-john-smith",
+    projectSlug: "receipt-information-extraction",
+    featured: true,
+  },
+  {
+    id: "placeholder-client",
+    quote:
+      "PLACEHOLDER: Mukul translated a fuzzy business problem into a clear technical plan, delivered on schedule, and explained trade-offs in terms our stakeholders could act on. I'd work with him again without hesitation.",
+    name: "Alex Lee",
+    title: "Product Director",
+    company: "Example Client",
+    relationship: "Client of Mukul's team",
+    linkedinUrl: "https://www.linkedin.com/in/placeholder-alex-lee",
+    featured: true,
+  },
 ];

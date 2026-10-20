@@ -9,14 +9,20 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "indexnow": "node scripts/indexnow.mjs"
+    "indexnow": "node scripts/indexnow.mjs",
+    "seed": "sanity exec scripts/seed-sanity.ts --with-user-token"
   },
   "license": "MIT",
   "dependencies": {
+    "@sanity/image-url": "^2.1.1",
+    "@sanity/vision": "^5.31.2",
     "next": "^16.3.8",
+    "next-sanity": "^13.3.4",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "resend": "^6.32.0",
+    "sanity": "^5.31.2",
+    "styled-components": "^6.6.0",
     "zod": "^4.6.5"
   },
   "devDependencies": {

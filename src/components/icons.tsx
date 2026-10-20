@@ -1,5 +1,5 @@
 import type { SVGProps } from "react";
-import type { Social } from "@/content/site";
+import type { Social } from "@/content/types";
 
 type IconProps = SVGProps<SVGSVGElement>;
 

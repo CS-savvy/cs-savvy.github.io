@@ -1,10 +1,10 @@
-import { site } from "@/content/site";
+import type { Social } from "@/content/types";
 import { socialIcons } from "./icons";
 
-export function SocialLinks({ className = "" }: { className?: string }) {
+export function SocialLinks({ socials, className = "" }: { socials: Social[]; className?: string }) {
   return (
     <ul className={`flex items-center gap-2 ${className}`}>
-      {site.socials.map(({ label, href, icon }) => {
+      {socials.map(({ label, href, icon }) => {
         const Icon = socialIcons[icon];
         return (
           <li key={href}>
