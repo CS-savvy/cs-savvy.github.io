@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { nav, site } from "@/content/site";
 import { CloseIcon, MenuIcon } from "./icons";
 import { ThemeToggle } from "./theme-toggle";
 
-export function Header() {
+export function Header({ name, nav }: { name: string; nav: { label: string; href: string }[] }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -24,7 +23,7 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" aria-label={`${site.name} - home`} className="flex items-center" onClick={() => setOpen(false)}>
+        <Link href="/" aria-label={`${name} - home`} className="flex items-center" onClick={() => setOpen(false)}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo-light.svg" alt="" width={158} height={32} className="h-8 w-auto dark:hidden" />
           {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -77,6 +77,21 @@
   50% { opacity: 1; }
 }
 
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+}
+
+/* Scroll-driven fade-up; browsers without support (and reduced-motion users) just show the content. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }

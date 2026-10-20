@@ -13,8 +13,22 @@ npm run lint
 
 ## Editing content
 
-All copy, skills, projects, experience and social links live in [`src/content/site.ts`](src/content/site.ts).
-Each project automatically gets a page at `/projects/<slug>`. The Experience section appears once you add entries.
+Content is managed in [Sanity](https://www.sanity.io). The Studio is embedded at **`/studio`** (e.g. `http://localhost:3000/studio`):
+
+- **Site settings** - name, role, hero, About text, stats, résumé PDF, socials, contact text and section headings
+- **Résumé** - experience, publications, patents, skills, education, certifications (drag to reorder)
+- **Projects** - each gets a page at `/projects/<slug>`; sort with the `order` field
+- **Blog posts** & **Blog categories** - personal posts at `/blog/<slug>`, filterable at `/blog/category/<slug>`
+
+Sections with no entries are hidden automatically. Published changes appear on the live site within seconds (via `<SanityLive />`) without a redeploy.
+
+**First-time setup**
+
+1. Set `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` in `.env.local` (and in Vercel).
+2. In [sanity.io/manage](https://www.sanity.io/manage) → API → CORS origins, add `http://localhost:3000` and your production URL (with credentials allowed).
+3. Import the existing content: `npx sanity login`, then `npm run seed`.
+
+Until a *Site settings* document exists, the site renders the bundled fallback content in [`src/content/fallback.ts`](src/content/fallback.ts).
 
 ## Contact form
 

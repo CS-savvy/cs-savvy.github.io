@@ -2,7 +2,7 @@
 
 import { Resend } from "resend";
 import { z } from "zod";
-import { site } from "@/content/site";
+import { getSettings } from "@/content";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Please enter your name.").max(100),
@@ -39,6 +39,7 @@ export async function sendContact(_prev: ContactState, formData: FormData): Prom
   }
 
   const { name, email, message } = parsed.data;
+  const site = await getSettings();
   const { error } = await new Resend(apiKey).emails.send({
     from: process.env.CONTACT_FROM_EMAIL ?? `${site.name} Portfolio <onboarding@resend.dev>`,
     to,
