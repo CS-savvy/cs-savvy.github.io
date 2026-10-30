@@ -6,15 +6,15 @@ const tags = (name: string, title?: string) =>
 /** Career data shown on the home page. Arrays keep drag-and-drop ordering in the Studio. */
 export const resume = defineType({
   name: "resume",
-  title: "Résumé",
+  title: "Resume",
   type: "document",
   fields: [
     defineField({
       name: "pdf",
-      title: "Résumé PDF",
+      title: "Resume PDF",
       type: "file",
       description:
-        "Served by the “Download résumé” button. Upload a new PDF to replace it; remove it to hide the button.",
+        "Served by the “Download Resume” button. Upload a new PDF to replace it; remove it to hide the button.",
       options: { accept: "application/pdf" },
     }),
     defineField({
@@ -34,6 +34,17 @@ export const resume = defineType({
               validation: (r) => r.required(),
             }),
             defineField({ name: "location", type: "string" }),
+            defineField({
+              name: "summary",
+              type: "string",
+              description: "One line for the homepage Background block (the most recent role per company is used)",
+            }),
+            defineField({
+              name: "internship",
+              type: "boolean",
+              description: "Hide from the homepage Background block",
+              initialValue: false,
+            }),
             defineField({ name: "points", title: "Bullet points", type: "array", of: [{ type: "text", rows: 2 }] }),
             tags("stack", "Tech stack"),
           ],
@@ -87,6 +98,7 @@ export const resume = defineType({
         defineArrayMember({
           type: "object",
           name: "skillGroup",
+          description: "Shown under “How I deliver”, e.g. Research / Build / Optimize / Operate",
           fields: [defineField({ name: "group", type: "string", validation: (r) => r.required() }), tags("items")],
           preview: {
             select: { title: "group", items: "items" },
@@ -112,7 +124,12 @@ export const resume = defineType({
         }),
       ],
     }),
-    defineField({ name: "certifications", type: "array", of: [{ type: "string" }] }),
+    defineField({
+      name: "certifications",
+      type: "array",
+      of: [{ type: "string" }],
+      description: "Not shown on the homepage",
+    }),
   ],
-  preview: { prepare: () => ({ title: "Résumé" }) },
+  preview: { prepare: () => ({ title: "Resume" }) },
 });

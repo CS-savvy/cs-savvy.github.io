@@ -1,5 +1,12 @@
-import { getSettings } from "@/content";
+import { getSettings, type SiteSettings } from "@/content";
+import { DownloadIcon } from "./icons";
 import { SocialLinks } from "./social-links";
+
+/** Sanity's `dl` parameter forces a download with a readable filename (`download` is ignored cross-origin). */
+function resumeDownloadUrl({ resumeUrl = "", name }: SiteSettings) {
+  if (!resumeUrl.startsWith("https://cdn.sanity.io/")) return resumeUrl;
+  return `${resumeUrl}?dl=${encodeURIComponent(`${name.replace(/\s+/g, "-")}-Resume.pdf`)}`;
+}
 
 export async function Footer() {
   const site = await getSettings();
@@ -11,7 +18,18 @@ export async function Footer() {
           <img src="/logo-mark.svg" alt="" width={20} height={20} className="size-5" />© {new Date().getFullYear()}{" "}
           {site.name}. Built with Next.js.
         </p>
-        <SocialLinks socials={site.socials} />
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          {site.resumeUrl && (
+            <a
+              href={resumeDownloadUrl(site)}
+              download
+              className="inline-flex items-center gap-1.5 hover:text-foreground"
+            >
+              <DownloadIcon width={16} height={16} /> Resume (PDF)
+            </a>
+          )}
+          <SocialLinks socials={site.socials} />
+        </div>
       </div>
     </footer>
   );

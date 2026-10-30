@@ -10,9 +10,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const site = await getSettings();
   return {
     metadataBase: new URL(site.url),
-    title: { default: `${site.name} - ${site.role}`, template: `%s · ${site.name}` },
+    title: { default: `${site.name} — ${site.role}`, template: `%s · ${site.name}` },
     description: site.intro,
-    openGraph: { type: "website", siteName: site.name, url: "/" },
+    // Canonical and og:url are set per page (src/lib/seo.ts) so pages don't inherit the homepage URL.
+    openGraph: { type: "website", siteName: site.name, title: `${site.name} — ${site.role}`, description: site.intro },
     twitter: { card: "summary_large_image" },
     icons: {
       icon: [

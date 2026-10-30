@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeftIcon } from "@/components/icons";
+import { JsonLd } from "@/components/json-ld";
 import { PostMeta } from "@/components/post-card";
 import { RichText } from "@/components/rich-text";
 import { SanityImage } from "@/components/sanity-image";
-import { getPost, getPosts } from "@/content";
+import { getPost, getPosts, getSettings } from "@/content";
+import { pageMetadata } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 
 export async function generateStaticParams() {
@@ -16,24 +18,39 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return {};
-  return {
+  return pageMetadata({
+    path: `/blog/${slug}`,
     title: post.title,
     description: post.excerpt,
-    openGraph: {
-      type: "article",
-      publishedTime: post.publishedAt,
-      ...(post.coverImage?.asset && { images: [urlFor(post.coverImage).width(1200).height(630).fit("crop").url()] }),
-    },
-  };
+    type: "article",
+    ownImage: true,
+    publishedTime: post.publishedAt,
+  });
 }
 
 export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const [post, site] = await Promise.all([getPost(slug), getSettings()]);
   if (!post) notFound();
 
+  const url = `${site.url}/blog/${post.slug}`;
   return (
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: post.title,
+          description: post.excerpt,
+          datePublished: post.publishedAt,
+          author: { "@type": "Person", name: site.name, url: site.url },
+          ...(post.coverImage?.asset && {
+            image: urlFor(post.coverImage).width(1200).height(630).fit("crop").url(),
+          }),
+          mainEntityOfPage: url,
+          url,
+        }}
+      />
       <Link href="/blog" className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground">
         <ArrowLeftIcon width={16} height={16} /> All posts
       </Link>

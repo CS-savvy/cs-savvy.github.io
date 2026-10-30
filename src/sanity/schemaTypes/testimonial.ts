@@ -19,13 +19,22 @@ export const testimonial = defineType({
       name: "shortQuote",
       type: "text",
       rows: 2,
-      description: "1–2 sentences for case study pages. Falls back to the full quote.",
+      description:
+        "1–2 sentences shown on homepage cards (with a “Read full recommendation” toggle) and case studies. Falls back to the full quote.",
     }),
     defineField({
       name: "linkedinUrl",
       title: "LinkedIn URL",
       type: "url",
-      validation: (r) => r.required().uri({ scheme: ["https"] }),
+      description: "The recommender's own LinkedIn profile (not your recommendations page)",
+      validation: (r) =>
+        r
+          .uri({ scheme: ["https"] })
+          .custom((url) =>
+            typeof url === "string" && url.includes("/details/recommendations")
+              ? "Link to the recommender's own profile, not the recommendations page"
+              : true,
+          ),
     }),
     defineField({
       name: "avatar",

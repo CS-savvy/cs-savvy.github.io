@@ -1,6 +1,4 @@
-import Link from "next/link";
 import type { Testimonial } from "@/content/types";
-import { ArrowRightIcon } from "./icons";
 import { SanityImage } from "./sanity-image";
 
 export const LINKEDIN_RECOMMENDATIONS_URL = "https://www.linkedin.com/in/mukulkr/details/recommendations/";
@@ -29,7 +27,9 @@ function Avatar({ testimonial, size }: { testimonial: Testimonial; size: number 
   );
 }
 
+/** The recommender's name, linked to their own LinkedIn profile when one is set. */
 function AuthorLink({ testimonial }: { testimonial: Testimonial }) {
+  if (!testimonial.linkedinUrl) return <span className="font-semibold">{testimonial.name}</span>;
   return (
     <a
       href={testimonial.linkedinUrl}
@@ -49,13 +49,25 @@ const QuoteMark = () => (
   </svg>
 );
 
+/** Homepage card: the short quote, with the full recommendation behind a native disclosure. */
 export function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
+  const { shortQuote, quote } = testimonial;
+  const expandable = Boolean(shortQuote && shortQuote.trim() !== quote.trim());
   return (
-    <figure className="reveal flex flex-col rounded-2xl border border-border bg-card p-6">
+    <figure className="reveal flex flex-col rounded-2xl border border-border bg-card p-6 sm:p-8">
       <QuoteMark />
-      <blockquote className="mt-4 flex-1 leading-relaxed text-pretty">
-        <p>{testimonial.quote}</p>
+      <blockquote className="mt-4 flex-1 text-lg leading-relaxed text-pretty">
+        <p>{expandable ? shortQuote : quote}</p>
       </blockquote>
+      {expandable && (
+        <details className="group mt-4 text-sm">
+          <summary className="cursor-pointer list-none font-medium text-accent hover:underline [&::-webkit-details-marker]:hidden">
+            <span className="group-open:hidden">Read full recommendation</span>
+            <span className="hidden group-open:inline">Hide full recommendation</span>
+          </summary>
+          <p className="mt-3 leading-relaxed text-pretty text-muted">{quote}</p>
+        </details>
+      )}
       <figcaption className="mt-6 flex items-center gap-3 border-t border-border pt-5">
         <Avatar testimonial={testimonial} size={44} />
         <div className="min-w-0">
@@ -70,7 +82,7 @@ export function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   );
 }
 
-/** Compact testimonial plus contact CTA for case study pages. */
+/** Compact testimonial for case study pages. */
 export function CompactTestimonial({ testimonial }: { testimonial: Testimonial | null }) {
   if (!testimonial) return null;
   return (
@@ -90,15 +102,6 @@ export function CompactTestimonial({ testimonial }: { testimonial: Testimonial |
           </p>
         </figcaption>
       </figure>
-      <p className="mt-6 text-muted">
-        Have a similar problem?{" "}
-        <Link
-          href="/#contact"
-          className="inline-flex items-center gap-1 font-medium text-accent hover:underline"
-        >
-          Let&apos;s talk <ArrowRightIcon width={16} height={16} />
-        </Link>
-      </p>
     </section>
   );
 }

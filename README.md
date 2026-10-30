@@ -15,8 +15,8 @@ npm run lint
 
 Content is managed in [Sanity](https://www.sanity.io). The Studio is embedded at **`/studio`** (e.g. `http://localhost:3000/studio`):
 
-- **Site settings** - name, role, hero, About text, stats, résumé PDF, socials, contact text and section headings
-- **Résumé** - experience, publications, patents, skills, education, certifications (drag to reorder)
+- **Site settings** - name, role, hero, About text, stats, resume PDF, socials, contact text and section headings
+- **Resume** - experience, publications, patents, skills, education, certifications (drag to reorder)
 - **Projects** - each gets a page at `/projects/<slug>`; sort with the `order` field
 - **Blog posts** & **Blog categories** - personal posts at `/blog/<slug>`, filterable at `/blog/category/<slug>`
 

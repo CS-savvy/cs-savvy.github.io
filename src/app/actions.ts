@@ -3,10 +3,19 @@
 import { Resend } from "resend";
 import { z } from "zod";
 import { getSettings } from "@/content";
+import { BUDGET_OPTIONS, TIMELINE_OPTIONS } from "@/lib/contact-options";
+
+/** An optional select: empty means "not answered". */
+const optionalChoice = (options: readonly string[]) =>
+  z.union([z.literal(""), z.enum(options as [string, ...string[]], "Please pick one of the options.")]);
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Please enter your name.").max(100),
   email: z.email("Please enter a valid email address."),
+  // Service titles come from the CMS, so this is checked for shape rather than against a fixed list.
+  projectType: z.string().trim().min(1, "Please choose a project type.").max(120),
+  budget: optionalChoice(BUDGET_OPTIONS),
+  timeline: optionalChoice(TIMELINE_OPTIONS),
   message: z.string().trim().min(10, "Message should be at least 10 characters.").max(5000),
 });
 
@@ -24,6 +33,9 @@ export async function sendContact(_prev: ContactState, formData: FormData): Prom
   const raw = {
     name: String(formData.get("name") ?? ""),
     email: String(formData.get("email") ?? ""),
+    projectType: String(formData.get("projectType") ?? ""),
+    budget: String(formData.get("budget") ?? ""),
+    timeline: String(formData.get("timeline") ?? ""),
     message: String(formData.get("message") ?? ""),
   };
   const parsed = contactSchema.safeParse(raw);
@@ -38,14 +50,21 @@ export async function sendContact(_prev: ContactState, formData: FormData): Prom
     return { status: "error", message: "The contact form isn't available right now.", fields: raw };
   }
 
-  const { name, email, message } = parsed.data;
+  const { name, email, projectType, budget, timeline, message } = parsed.data;
   const site = await getSettings();
   const { error } = await new Resend(apiKey).emails.send({
-    from: process.env.CONTACT_FROM_EMAIL ?? `${site.name} Portfolio <onboarding@resend.dev>`,
+    from: process.env.CONTACT_FROM_EMAIL ?? `${site.name} <onboarding@resend.dev>`,
     to,
     replyTo: email,
-    subject: `Portfolio message from ${name}`,
-    text: `From: ${name} <${email}>\n\n${message}`,
+    subject: `New project enquiry from ${name}: ${projectType}`,
+    text: [
+      `From: ${name} <${email}>`,
+      `Project type: ${projectType}`,
+      `Budget: ${budget || "Not specified"}`,
+      `Timeline: ${timeline || "Not specified"}`,
+      "",
+      message,
+    ].join("\n"),
   });
 
   if (error) {

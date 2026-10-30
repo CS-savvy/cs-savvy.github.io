@@ -9,27 +9,21 @@
 import { createReadStream } from "node:fs";
 import { join } from "node:path";
 import { getCliClient } from "sanity/cli";
-import { fallbackProjects, fallbackResume, fallbackSettings, fallbackTestimonials } from "../src/content/fallback";
+import {
+  fallbackProcess,
+  fallbackProjects,
+  fallbackResume,
+  fallbackServices,
+  fallbackSettings,
+  fallbackTestimonials,
+} from "../src/content/fallback";
+import { withKeys } from "./lib/with-keys";
 
 const client = getCliClient({ apiVersion: "2026-10-20" });
 
-/** Sanity requires a unique `_key` on every object inside an array. */
-function withKeys<T>(value: T, path = "k"): T {
-  if (Array.isArray(value)) {
-    return value.map((item, i) => {
-      const keyed = withKeys(item, `${path}${i}`);
-      return keyed && typeof keyed === "object" && !("_key" in keyed) ? { _key: `${path}${i}`, ...keyed } : keyed;
-    }) as T;
-  }
-  if (value && typeof value === "object") {
-    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, withKeys(v, `${path}${k[0]}`)])) as T;
-  }
-  return value;
-}
-
 async function main() {
-  const { resumeUrl, headings, ...settings } = fallbackSettings;
-  void headings; // defaults live in code; set custom ones in the Studio
+  const { resumeUrl, headings, process: _process, ...settings } = fallbackSettings;
+  void [headings, _process]; // headings default in code; process is set from fallbackProcess below
 
   let pdf: { _type: "file"; asset: { _type: "reference"; _ref: string } } | undefined;
   if (resumeUrl?.startsWith("/")) {
@@ -40,7 +34,12 @@ async function main() {
   }
 
   const tx = client.transaction();
-  tx.createIfNotExists(withKeys({ _id: "siteSettings", _type: "siteSettings", ...settings }));
+  tx.createIfNotExists(
+    withKeys({ _id: "siteSettings", _type: "siteSettings", ...settings, process: fallbackProcess }),
+  );
+  fallbackServices.forEach(({ id, ...service }, i) =>
+    tx.createIfNotExists(withKeys({ _id: id, _type: "service", order: (i + 1) * 10, ...service })),
+  );
   tx.createIfNotExists(withKeys({ _id: "resume", _type: "resume", ...(pdf && { pdf }), ...fallbackResume }));
   fallbackProjects.forEach(({ slug, ...project }, i) =>
     tx.createIfNotExists(
@@ -53,7 +52,9 @@ async function main() {
       }),
     ),
   );
-  fallbackTestimonials.forEach(({ id, projectSlug, ...testimonial }, i) =>
+  // Testimonials have generated ids once edited in the Studio, so only seed them into an empty dataset.
+  const hasTestimonials = await client.fetch<boolean>(`count(*[_type == "testimonial"]) > 0`);
+  (hasTestimonials ? [] : fallbackTestimonials).forEach(({ id, projectSlug, ...testimonial }, i) =>
     tx.createIfNotExists({
       _id: `testimonial-${id}`,
       _type: "testimonial",

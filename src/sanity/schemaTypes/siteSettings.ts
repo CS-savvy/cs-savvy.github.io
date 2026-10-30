@@ -8,13 +8,20 @@ export const siteSettings = defineType({
     { name: "identity", title: "Identity", default: true },
     { name: "hero", title: "Hero" },
     { name: "about", title: "About" },
+    { name: "process", title: "How I work" },
     { name: "contact", title: "Contact & socials" },
     { name: "sideProjects", title: "Side projects" },
     { name: "sections", title: "Section headings" },
   ],
   fields: [
     defineField({ name: "name", type: "string", group: "identity", validation: (r) => r.required() }),
-    defineField({ name: "role", type: "string", group: "identity", validation: (r) => r.required() }),
+    defineField({
+      name: "role",
+      type: "string",
+      group: "identity",
+      description: "Used in the page title and link previews, e.g. “Computer Vision & Document AI Consultant”",
+      validation: (r) => r.required(),
+    }),
     defineField({ name: "url", title: "Site URL", type: "url", group: "identity", validation: (r) => r.required() }),
     defineField({
       name: "intro",
@@ -26,14 +33,36 @@ export const siteSettings = defineType({
     }),
     defineField({ name: "location", type: "string", group: "identity" }),
     defineField({ name: "focus", type: "string", group: "identity", description: "Shown in the About fact list" }),
+    defineField({
+      name: "engagements",
+      type: "string",
+      group: "identity",
+      description: "Shown in the About fact list, e.g. “Fixed-scope audits, project builds, fractional ML lead”",
+    }),
 
     defineField({
       name: "availability",
       type: "string",
       group: "hero",
-      description: "Status pill, e.g. “Open to new opportunities”. Leave empty to hide.",
+      description: "Status pill, e.g. “Available for consulting engagements”. Leave empty to hide.",
     }),
-    defineField({ name: "headline", type: "text", rows: 3, group: "hero" }),
+    defineField({
+      name: "heroTitle",
+      title: "Hero title",
+      type: "string",
+      group: "hero",
+      description: "The main headline (H1). Falls back to “Name - Role” when empty.",
+    }),
+    defineField({ name: "headline", title: "Hero subheadline", type: "text", rows: 3, group: "hero" }),
+    defineField({
+      name: "bookingUrl",
+      title: "Booking link",
+      type: "url",
+      group: "hero",
+      description:
+        "Cal.com / Calendly link used by every “Book an intro call” button. Buttons go to the contact form while empty.",
+      validation: (r) => r.uri({ scheme: ["https"] }),
+    }),
 
     defineField({
       name: "aboutTitle",
@@ -58,6 +87,26 @@ export const siteSettings = defineType({
           preview: { select: { title: "value", subtitle: "label" } },
         }),
       ],
+    }),
+
+    defineField({
+      name: "process",
+      title: "Process steps",
+      type: "array",
+      group: "process",
+      description: "The “How I work” strip, e.g. Discover → Build → Optimize → Hand over",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "processStep",
+          fields: [
+            defineField({ name: "title", type: "string", validation: (r) => r.required() }),
+            defineField({ name: "description", type: "text", rows: 2 }),
+          ],
+          preview: { select: { title: "title", subtitle: "description" } },
+        }),
+      ],
+      validation: (r) => r.max(6),
     }),
 
     defineField({ name: "email", type: "string", group: "contact", validation: (r) => r.email() }),
@@ -120,11 +169,13 @@ export const siteSettings = defineType({
 
     ...(
       [
-        ["experienceHeading", "Experience"],
+        ["servicesHeading", "Services"],
+        ["experienceHeading", "Background"],
         ["projectsHeading", "Projects"],
         ["testimonialsHeading", "Testimonials"],
         ["researchHeading", "Research"],
-        ["skillsHeading", "Skills"],
+        ["processHeading", "How I work"],
+        ["skillsHeading", "How I deliver (toolkit)"],
         ["educationHeading", "Education"],
         ["sideProjectsHeading", "Side projects"],
         ["blogHeading", "Blog"],

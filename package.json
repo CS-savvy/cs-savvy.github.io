@@ -2,7 +2,7 @@
   "name": "cs-savvy-portfolio",
   "version": "2.0.0",
   "private": true,
-  "description": "Mukul - Deep Learning Engineer portfolio",
+  "description": "Mukul Kumar - Computer Vision & Document AI consulting site",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,7 +10,9 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "indexnow": "node scripts/indexnow.mjs",
-    "seed": "sanity exec scripts/seed-sanity.ts --with-user-token"
+    "seed": "sanity exec scripts/seed-sanity.ts --with-user-token",
+    "migrate": "sanity exec scripts/migrate-consulting.ts --with-user-token",
+    "migrate:dry": "sanity exec scripts/migrate-consulting.ts --with-user-token -- --dry-run"
   },
   "license": "MIT",
   "dependencies": {

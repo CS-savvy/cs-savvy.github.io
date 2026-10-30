@@ -1,7 +1,7 @@
 import { defineQuery } from "next-sanity";
 
 export const SETTINGS_QUERY = defineQuery(`*[_id == "siteSettings"][0]{
-  name, role, url, intro, location, focus, availability, headline,
+  name, role, url, intro, location, focus, engagements, availability, heroTitle, headline, bookingUrl,
   "resumeUrl": *[_id == "resume"][0].pdf.asset->url,
   aboutTitle,
   "about": coalesce(about, []),
@@ -9,12 +9,15 @@ export const SETTINGS_QUERY = defineQuery(`*[_id == "siteSettings"][0]{
   email, contactBlurb,
   "socials": coalesce(socials, []),
   "sideProjects": coalesce(sideProjects, []),
+  "process": coalesce(process, []),
   "headings": {
+    "services": servicesHeading,
     "experience": experienceHeading,
     "projects": projectsHeading,
     "testimonials": testimonialsHeading,
     "research": researchHeading,
     "skills": skillsHeading,
+    "process": processHeading,
     "education": educationHeading,
     "sideProjects": sideProjectsHeading,
     "blog": blogHeading,
@@ -32,7 +35,12 @@ export const RESUME_QUERY = defineQuery(`*[_id == "resume"][0]{
 }`);
 
 const projectFields = `
-  "slug": slug.current, title, summary, year, featured,
+  "slug": slug.current, title, summary, year, featured, context, image,
+  "kind": coalesce(kind, "client"),
+  "problem": coalesce(problem, []),
+  "approach": coalesce(approach, []),
+  "results": coalesce(results, []),
+  "stack": coalesce(stack, []),
   "description": coalesce(description, []),
   "tags": coalesce(tags, []),
   "highlights": coalesce(highlights, []),
@@ -44,6 +52,11 @@ export const PROJECTS_QUERY = defineQuery(
 );
 
 export const PROJECT_QUERY = defineQuery(`*[_type == "project" && slug.current == $slug][0]{${projectFields}}`);
+
+export const SERVICES_QUERY = defineQuery(`*[_type == "service"] | order(order asc, _createdAt asc){
+  "id": _id, title, audience, timeline, proof, ctaLabel,
+  "deliverables": coalesce(deliverables, [])
+}`);
 
 const testimonialFields = `
   "id": _id, quote, shortQuote, name, title, company, relationship, linkedinUrl, avatar,

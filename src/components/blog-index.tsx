@@ -35,6 +35,7 @@ export async function BlogIndex({ category }: { category?: string }) {
         </ul>
       )}
 
+      <h2 className="sr-only">Posts</h2>
       {posts.length > 0 ? (
         <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
